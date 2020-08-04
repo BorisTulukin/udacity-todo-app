@@ -5,6 +5,23 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-reqvalidator-plugin
+  - serverless-aws-documentation
+
+custom:
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: ToDos API
+        description: serverless api for ToDo application
+    models:
+      - name: CreateTodoValidationModel
+        contentType: application/json
+        schema: ${file(src/requestValidators/create.json)}
+      - name: UpdateTodoValidationModel
+        contentType: application/json
+        schema: ${file(src/requestValidators/update.json)}
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -52,7 +69,7 @@ functions:
             summary: Create a new ToDo Item
             description: Create a new ToDo Item
             requestModels:
-              'application/json': CreateToDoRequest
+              'application/json': CreateTodoValidationModel
     iamRoleStatements:
       - Effect: Allow
         Action:
@@ -72,7 +89,7 @@ functions:
             summary: Update ToDo Item
             description: Update ToDo Item
             requestModels:
-              'application/json': UpdateToDoRequest
+              'application/json': UpdateTodoValidationModel
     iamRoleStatements:
       - Effect: Allow
         Action:
